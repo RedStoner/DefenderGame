@@ -5,13 +5,13 @@ using UnityEngine.Networking;
 
 public class EnemyPathing : NetworkBehaviour {
 
-    public double attackRange = 1.0;
-    public float pathingUpdateTime = 0.5f;
+    public double attackRange;
+    public float pathingUpdateTime;
     
     public NavMeshAgent unitAgent;
-
+    
+    private Attributes attributes;
     private GameObject[] targets;
-
     private GameObject target;
 
     private NavMeshPath path;
@@ -20,7 +20,12 @@ public class EnemyPathing : NetworkBehaviour {
     // Use this for initialization
     void Start () {
         path = new NavMeshPath();
-	}
+        attributes = gameObject.GetComponent<Attributes>();
+        attackRange = attributes.attackRange;
+        pathingUpdateTime = attributes.pathingUpdateTime;
+        
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -95,7 +100,7 @@ public class EnemyPathing : NetworkBehaviour {
                 float testDistance = GetDistance(t.transform.position);
                 distances.Add(testDistance);
                 //calculate and save the weight value.
-                weights.Add(testDistance / t.GetComponent<PathingData>().pathingWeight);
+                weights.Add(testDistance / t.GetComponent<Attributes>().pathingWeight);
             }
             int bestIndex = 0;
             for (int i = 0; i < targets.Length; i++)
