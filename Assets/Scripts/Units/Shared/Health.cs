@@ -5,18 +5,23 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 
 public class Health : NetworkBehaviour {
-    public const int maxHealth = 50;
     [SyncVar(hook = "OnChangeHealth")]
-    public int currentHealth = maxHealth;
+    public int currentHealth;
     public RectTransform healthBar;
-	// Use this for initialization
-	public void TakeDamage (int amt)
+    private Attributes attributes;
+    // Use this for initialization
+    private void Start()
+    {
+        attributes = gameObject.GetComponent<Attributes>();
+        currentHealth = attributes.maxHealth;
+    }
+    public void TakeDamage (int amt)
     {
         if (!isServer) { return; }
-        currentHealth -= amt;
+        currentHealth -= amt - attributes.armor;
         if (currentHealth <= 0)
         {
-            currentHealth = maxHealth;
+            currentHealth = attributes.maxHealth;
             print("A hero has died!");
             RpcRespawn();
         }
