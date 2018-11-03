@@ -50,8 +50,7 @@ public class EnemyPathing : NetworkBehaviour {
             if (target != null)
             {
                 //check if target is in attack range if so attack.
-                float d = GetDistance(target.transform.position);
-                double dist = d;
+                double dist = GetDistance(target.transform.position);
                 //print("Distance from target" + dist);
                 if (dist <= attackRange)
                 {
