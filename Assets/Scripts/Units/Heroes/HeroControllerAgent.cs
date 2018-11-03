@@ -9,7 +9,13 @@ public class HeroControllerAgent : NetworkBehaviour {
     public LayerMask groundLayer;
     public NavMeshAgent playerAgent;
     //private float elapsed = 0.0f;
+    private Attributes attributes;
 
+
+    private void Start()
+    {
+        playerAgent.speed = attributes.moveSpeed;
+    }
     private void Awake()
     {
         cam = Camera.main;
@@ -30,6 +36,7 @@ public class HeroControllerAgent : NetworkBehaviour {
 
             }
         }
+        //draw path in editor
         if (playerAgent.hasPath)
         {
             for (int i = 0; i < playerAgent.path.corners.Length - 1; i++)
