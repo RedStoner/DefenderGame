@@ -87,6 +87,7 @@ public class Combat : NetworkBehaviour {
         var bullet = (GameObject)Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
         bullet.transform.LookAt(target.transform);
         bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 20;
+        bullet.GetComponent<ProjectileBullet>().damageAmount = attributes.attackDamage;
         NetworkServer.Spawn(bullet);
         Destroy(bullet, 1.0f);
     }

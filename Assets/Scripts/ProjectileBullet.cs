@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ProjectileBullet : MonoBehaviour {
 
-    public const int damageAmount = 10;
+    public int damageAmount;
 
     private void OnCollisionEnter(Collision collision)
     {

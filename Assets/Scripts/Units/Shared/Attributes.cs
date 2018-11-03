@@ -5,7 +5,7 @@ using UnityEngine;
 public class Attributes : MonoBehaviour {
 
 //COMBAT
-    public float attackDamage = 1;
+    public int attackDamage = 1;
     public float attackRange = 1;
     public float attackSpeed = 1;
     public int armor = 0;
