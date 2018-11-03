@@ -95,7 +95,7 @@ public class EnemyPathing : NetworkBehaviour {
                 float testDistance = GetDistance(t.transform.position);
                 distances.Add(testDistance);
                 //calculate and save the weight value.
-                weights.Add(testDistance / t.GetComponentInParent<PathingData>().pathingWeight);
+                weights.Add(testDistance / t.GetComponent<PathingData>().pathingWeight);
             }
             int bestIndex = 0;
             for (int i = 0; i < targets.Length; i++)
