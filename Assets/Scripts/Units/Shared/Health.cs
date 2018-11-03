@@ -30,7 +30,7 @@ public class Health : NetworkBehaviour {
     {
         if (isLocalPlayer)
         {
-            transform.position = new Vector3(0f, 1f, 0f);
+            transform.position = new Vector3(10f, 1f, 10f);
         }
     }
     void OnChangeHealth (int currentHealth)

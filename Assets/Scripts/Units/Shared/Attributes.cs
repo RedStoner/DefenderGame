@@ -11,6 +11,7 @@ public class Attributes : MonoBehaviour {
     public int armor = 0;
     public int maxHealth = 50;
     public float maxEnergy = 10;
+    public int pathingWeight = 1;
 
 
 }
