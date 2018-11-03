@@ -14,6 +14,7 @@ public class Combat : NetworkBehaviour {
     // Use this for initialization
     void Start ()
     {
+        attributes = gameObject.GetComponent<Attributes>();
         attackSpeed = attributes.attackSpeed;
         attackRange = attributes.attackRange;
     }
@@ -29,6 +30,7 @@ public class Combat : NetworkBehaviour {
                 Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, attackRange);
                 if (hitColliders.Length < 0)
                 {
+                    print("No Target");
                     return;
                 }
                 int i = 0;
@@ -44,18 +46,35 @@ public class Combat : NetworkBehaviour {
             }
             if (target != null)
             {
-                CmdShootTarget();
+                //check if moving
+                if (gameObject.GetComponent<HeroControllerAgent>().playerAgent.hasPath)
+                {
+                    print("Cant Shoot, Still Moving.");
+                } else {
+                    CmdShootTarget();
+                    print("Shooting");
+                }
+            } else
+            {
+                print("No Target");
             }
 
         }
 	}
     private bool IsHostile(GameObject obj)
     {
-        string type = obj.GetComponent<Attributes>().unitType;
-        if (type == "Hostile" || type == "Boss")
+        if (obj.GetComponent<Attributes>())
         {
-            return true;
-        } else
+            string type = obj.GetComponent<Attributes>().unitType;
+            if (type == "Hostile" || type == "Boss")
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
+        else
         {
             return false;
         }
@@ -64,10 +83,11 @@ public class Combat : NetworkBehaviour {
     [Command]
     void CmdShootTarget()
     {
+        gameObject.transform.LookAt(target.transform);
         var bullet = (GameObject)Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
         bullet.transform.LookAt(target.transform);
-        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 6;
+        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 20;
         NetworkServer.Spawn(bullet);
-        Destroy(bullet, 2.0f);
+        Destroy(bullet, 1.0f);
     }
 }

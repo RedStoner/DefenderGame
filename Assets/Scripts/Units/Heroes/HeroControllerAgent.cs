@@ -14,6 +14,7 @@ public class HeroControllerAgent : NetworkBehaviour {
 
     private void Start()
     {
+        attributes = gameObject.GetComponent<Attributes>();
         playerAgent.speed = attributes.moveSpeed;
     }
     private void Awake()

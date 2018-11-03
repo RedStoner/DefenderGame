@@ -78,7 +78,7 @@ public class EnemyPathing : NetworkBehaviour {
     }
     public GameObject FindNewTarget()
     {
-        Debug.Log("Finding Target");
+        //Debug.Log("Finding Target");
         //print("Aquiriring Targets");
         targets = GameObject.FindGameObjectsWithTag("Player Hero");
         
@@ -130,7 +130,7 @@ public class EnemyPathing : NetworkBehaviour {
         float dist = 0.0f;
         for (int i = 0; i < path.corners.Length - 1; i++)
             dist += Vector3.Distance(path.corners[i], path.corners[i + 1]);
-        Debug.Log(dist);
+        //Debug.Log(dist);
         return dist;  
     }
 }
