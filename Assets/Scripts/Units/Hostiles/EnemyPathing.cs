@@ -23,7 +23,7 @@ public class EnemyPathing : NetworkBehaviour {
         attributes = gameObject.GetComponent<Attributes>();
         attackRange = attributes.attackRange;
         pathingUpdateTime = attributes.pathingUpdateTime;
-        
+        unitAgent.speed = attributes.moveSpeed;
 
     }
 	

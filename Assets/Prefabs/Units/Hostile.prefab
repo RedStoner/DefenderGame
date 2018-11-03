@@ -217,10 +217,13 @@ MonoBehaviour:
   attackDamage: 1
   attackRange: 1
   attackSpeed: 1
-  moveSpeed: 10
   armor: 0
   maxHealth: 50
   maxEnergy: 10
+  moveSpeed: 10
+  pathingWeight: 1
+  pathingUpdateTime: 0.5
+  unitType: Hero
 --- !u!114 &114218058915699336
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -280,6 +283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eebc22d890a28347b51c8628e3b2779, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destroyOnDeath: 1
   currentHealth: 0
   healthBar: {fileID: 224063302987030258}
 --- !u!114 &114837793157195460
