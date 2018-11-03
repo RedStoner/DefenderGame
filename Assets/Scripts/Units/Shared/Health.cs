@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 
 public class Health : NetworkBehaviour {
+    public bool destroyOnDeath;
     [SyncVar(hook = "OnChangeHealth")]
     public int currentHealth;
     public RectTransform healthBar;
@@ -22,8 +23,15 @@ public class Health : NetworkBehaviour {
         if (currentHealth <= 0)
         {
             currentHealth = attributes.maxHealth;
-            print("A hero has died!");
-            RpcRespawn();
+            print("A " + attributes.unitType + " has died!");
+            if (destroyOnDeath)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                RpcRespawn();
+            }
         }
     }
     void RpcRespawn()
