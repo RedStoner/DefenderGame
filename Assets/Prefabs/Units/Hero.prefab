@@ -28,6 +28,7 @@ GameObject:
   - component: {fileID: 114539344012999328}
   - component: {fileID: 114116687394998288}
   - component: {fileID: 114049441383849728}
+  - component: {fileID: 114823416656060250}
   - component: {fileID: 114501397518787050}
   - component: {fileID: 114231818026293118}
   m_Layer: 0
@@ -35,6 +36,21 @@ GameObject:
   m_TagString: Player Hero
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1063504482537834
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4004595043975266}
+  m_Layer: 0
+  m_Name: BulletSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!1 &1280375095722168
@@ -90,6 +106,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &4004595043975266
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1063504482537834}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.75, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4890872811303008}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4890872811303008
 Transform:
   m_ObjectHideFlags: 1
@@ -100,6 +129,7 @@ Transform:
   m_LocalPosition: {x: 10, y: 1, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 4004595043975266}
   - {fileID: 224801519571152384}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -168,6 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eebc22d890a28347b51c8628e3b2779, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destroyOnDeath: 0
   currentHealth: 50
   healthBar: {fileID: 224272172646577124}
 --- !u!114 &114116687394998288
@@ -184,10 +215,13 @@ MonoBehaviour:
   attackDamage: 1
   attackRange: 1
   attackSpeed: 1
-  moveSpeed: 10
   armor: 0
   maxHealth: 50
   maxEnergy: 10
+  moveSpeed: 10
+  pathingWeight: 1
+  pathingUpdateTime: 0.5
+  unitType: Hero
 --- !u!114 &114196108499621932
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -372,6 +406,20 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114823416656060250
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1011275192519448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97aef1c0f79390045bd918a5f663233f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 1342875108493484, guid: de7e592dd86d73641b2a8b0e2cf2e28c,
+    type: 2}
+  bulletSpawn: {fileID: 4004595043975266}
 --- !u!136 &136162470693919562
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -489,7 +537,7 @@ RectTransform:
   m_Children:
   - {fileID: 224586319225636896}
   m_Father: {fileID: 4890872811303008}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
