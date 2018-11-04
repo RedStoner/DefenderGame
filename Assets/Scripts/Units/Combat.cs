@@ -25,7 +25,7 @@ public class Combat : NetworkBehaviour {
         if (attackCooldown >= attackSpeed)
         {
             attackCooldown -= attackSpeed;
-            if (target == null)
+            if (target == null || !TargetInRange(target))
             {
                 Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, attackRange);
                 if (hitColliders.Length < 0)
@@ -39,7 +39,10 @@ public class Combat : NetworkBehaviour {
                     if (IsHostile(hitColliders[i].gameObject))
                     {
                         //check if its closest and has line of sight.
-                        target = hitColliders[i].gameObject;
+                        if (HasLineOfSight(hitColliders[i].gameObject))
+                        {
+                            target = hitColliders[i].gameObject;
+                        }
                     }
                     i++;
                 }
@@ -90,5 +93,31 @@ public class Combat : NetworkBehaviour {
         bullet.GetComponent<ProjectileBullet>().damageAmount = attributes.attackDamage;
         NetworkServer.Spawn(bullet);
         Destroy(bullet, 1.0f);
+    }
+    private bool TargetInRange(GameObject checkTarget)
+    {
+        if (checkTarget == null)
+        {
+            return false;
+        }
+        double distance = Vector3.Distance(gameObject.transform.position, checkTarget.transform.position);
+        if (distance > attackRange)
+        {
+            return false;
+        }
+        return HasLineOfSight(checkTarget);
+        
+    }
+    private bool HasLineOfSight(GameObject checkTarget)
+    {
+        bulletSpawn.transform.LookAt(checkTarget.transform);
+        RaycastHit hit;
+        if (Physics.Raycast(bulletSpawn.transform.position, bulletSpawn.transform.forward, out hit, attackRange ))
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
     }
 }
