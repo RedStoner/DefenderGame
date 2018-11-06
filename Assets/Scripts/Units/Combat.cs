@@ -54,7 +54,7 @@ public class Combat : NetworkBehaviour {
                 {
                     print("Cant Shoot, Still Moving.");
                 } else {
-                    CmdShootTarget();
+                    CmdShootTargetBullet();
                     print("Shooting");
                 }
             } else
@@ -84,7 +84,7 @@ public class Combat : NetworkBehaviour {
 
     }
     [Command]
-    void CmdShootTarget()
+    void CmdShootTargetBullet()
     {
         gameObject.transform.LookAt(target.transform);
         var bullet = (GameObject)Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
@@ -93,6 +93,11 @@ public class Combat : NetworkBehaviour {
         bullet.GetComponent<ProjectileBullet>().damageAmount = attributes.attackDamage;
         NetworkServer.Spawn(bullet);
         Destroy(bullet, 1.0f);
+    }
+    [Command]
+    void CmdShootTargetHitScan()
+    {
+        gameObject.transform.LookAt(target.transform);
     }
     private bool TargetInRange(GameObject checkTarget)
     {
@@ -114,10 +119,11 @@ public class Combat : NetworkBehaviour {
         RaycastHit hit;
         if (Physics.Raycast(bulletSpawn.transform.position, bulletSpawn.transform.forward, out hit, attackRange ))
         {
-            return true;
-        } else
-        {
-            return false;
-        }
+            if (hit.transform.gameObject == checkTarget)
+            {
+                return true;
+            }
+        } 
+        return false;
     }
 }
