@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.AI;
 
 public class EnemySpawner : NetworkBehaviour
 {
@@ -41,7 +42,11 @@ public class EnemySpawner : NetworkBehaviour
                 0.0f,
                 Random.Range(0, 180),
                 0.0f);
-
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(spawnPosition, out hit, 5, 1))
+            {
+                spawnPosition = hit.position;
+            }
             var enemy = (GameObject)Instantiate(enemyPrefab, spawnPosition, spawnRotation);
             NetworkServer.Spawn(enemy);
         }

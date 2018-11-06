@@ -81,6 +81,7 @@ GameObject:
   - component: {fileID: 114917531333781376}
   - component: {fileID: 114172758587977088}
   - component: {fileID: 114673482370619698}
+  - component: {fileID: 208280034434047468}
   m_Layer: 0
   m_Name: Hostile
   m_TagString: Untagged
@@ -381,6 +382,21 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!208 &208280034434047468
+NavMeshObstacle:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1949375267530962}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!222 &222086581979107384
 CanvasRenderer:
   m_ObjectHideFlags: 1
