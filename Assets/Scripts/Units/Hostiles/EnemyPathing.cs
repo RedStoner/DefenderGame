@@ -9,6 +9,7 @@ public class EnemyPathing : NetworkBehaviour {
     public float pathingUpdateTime;
     
     public NavMeshAgent unitAgent;
+    public NavMeshObstacle unitObstacle;
     
     private Attributes attributes;
     private GameObject[] targets;
@@ -25,6 +26,7 @@ public class EnemyPathing : NetworkBehaviour {
         pathingUpdateTime = attributes.pathingUpdateTime;
         unitAgent.speed = attributes.moveSpeed;
         unitAgent.stoppingDistance = attributes.attackRange;
+        unitObstacle = gameObject.GetComponent<NavMeshObstacle>();
 
     }
 	
@@ -54,6 +56,11 @@ public class EnemyPathing : NetworkBehaviour {
                 //print("Distance from target" + dist);
                 if (dist > attackRange)
                 {
+                    if (!unitAgent.enabled)
+                    {
+                        unitAgent.enabled = true;
+                        unitObstacle.enabled = false;
+                    }
                     //if target is not in range, move closer to the target. 
                     //NavMesh.CalculatePath(unitAgent.transform.position, target.transform.position, NavMesh.AllAreas, path);
                     //unitAgent.path = path;
@@ -63,6 +70,14 @@ public class EnemyPathing : NetworkBehaviour {
                     //if not find new target
                     //check tracking range for new target
                     //if no target found, move back to spawn point
+                }
+                else
+                {
+                    if (unitAgent.enabled)
+                    {
+                        unitAgent.enabled = false;
+                        unitObstacle.enabled = true;
+                    }
                 }
 
             }

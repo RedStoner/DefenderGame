@@ -7,7 +7,7 @@ public class EnemySpawner : NetworkBehaviour
 
     public GameObject enemyPrefab;
     public int numberOfEnemies;
-    public float spawnInterval = 10.0f;
+    public float spawnInterval = 5.0f;
     private float spawnCooldown = 0.0f;
 
     public override void OnStartServer()
