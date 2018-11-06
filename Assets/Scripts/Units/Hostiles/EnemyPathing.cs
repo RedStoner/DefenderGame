@@ -24,6 +24,7 @@ public class EnemyPathing : NetworkBehaviour {
         attackRange = attributes.attackRange;
         pathingUpdateTime = attributes.pathingUpdateTime;
         unitAgent.speed = attributes.moveSpeed;
+        unitAgent.stoppingDistance = attributes.attackRange;
 
     }
 	
@@ -49,28 +50,20 @@ public class EnemyPathing : NetworkBehaviour {
             
             if (target != null)
             {
-                //check if target is in attack range if so attack.
                 double dist = GetDistance(target.transform.position);
                 //print("Distance from target" + dist);
-                if (dist <= attackRange)
+                if (dist > attackRange)
                 {
-                    //attack mechanics done in different timer in update loop.
-                    //stop moving to target once in range
-                    if (unitAgent.hasPath)
-                    {
-                        unitAgent.ResetPath();
-                    }
-                    return;
-                }
-                //if target is not in range, move closer to the target. 
-                //NavMesh.CalculatePath(unitAgent.transform.position, target.transform.position, NavMesh.AllAreas, path);
-                //unitAgent.path = path;
-                unitAgent.SetDestination(target.transform.position);
-                //unitAgent.Move(unitAgent.transform.forward);
+                    //if target is not in range, move closer to the target. 
+                    //NavMesh.CalculatePath(unitAgent.transform.position, target.transform.position, NavMesh.AllAreas, path);
+                    //unitAgent.path = path;
+                    unitAgent.SetDestination(target.transform.position);
+                    //unitAgent.Move(unitAgent.transform.forward);
                     //if so move to target
                     //if not find new target
-                        //check tracking range for new target
-                        //if no target found, move back to spawn point
+                    //check tracking range for new target
+                    //if no target found, move back to spawn point
+                }
 
             }
         }
