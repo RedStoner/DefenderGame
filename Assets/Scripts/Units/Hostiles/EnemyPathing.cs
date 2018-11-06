@@ -58,8 +58,8 @@ public class EnemyPathing : NetworkBehaviour {
                 {
                     if (!unitAgent.enabled)
                     {
-                        unitAgent.enabled = true;
                         unitObstacle.enabled = false;
+                        unitAgent.enabled = true;
                     }
                     //if target is not in range, move closer to the target. 
                     //NavMesh.CalculatePath(unitAgent.transform.position, target.transform.position, NavMesh.AllAreas, path);

@@ -4,23 +4,30 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class Combat : NetworkBehaviour {
+    public float effectTime = .15f;
+
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
+
     private float attackCooldown = 0.0f;
     private Attributes attributes;
     private float attackSpeed;
     private float attackRange;
     private GameObject target;
+    private float lineTimer;
+    LineRenderer gunLine;
     // Use this for initialization
     void Start ()
     {
         attributes = gameObject.GetComponent<Attributes>();
         attackSpeed = attributes.attackSpeed;
         attackRange = attributes.attackRange;
+        gunLine = GetComponent<LineRenderer>();
     }
 	
 	// Update is called once per frame
 	void Update () {
+        EffectsCheck();
         attackCooldown += Time.deltaTime;
         if (attackCooldown >= attackSpeed)
         {
@@ -54,7 +61,7 @@ public class Combat : NetworkBehaviour {
                 {
                     print("Cant Shoot, Still Moving.");
                 } else {
-                    CmdShootTargetBullet();
+                    CmdShootTargetHitScan();
                     print("Shooting");
                 }
             } else
@@ -98,6 +105,10 @@ public class Combat : NetworkBehaviour {
     void CmdShootTargetHitScan()
     {
         gameObject.transform.LookAt(target.transform);
+        gunLine.enabled = true;
+        gunLine.SetPosition(0, transform.position);
+        gunLine.SetPosition(1, target.transform.position);
+        target.GetComponent<Health>().TakeDamage(attributes.attackDamage);
     }
     private bool TargetInRange(GameObject checkTarget)
     {
@@ -125,5 +136,15 @@ public class Combat : NetworkBehaviour {
             }
         } 
         return false;
+
+    }
+    private void EffectsCheck()
+    {
+
+        lineTimer += Time.deltaTime;
+        if (lineTimer >= effectTime)
+        {
+            gunLine.enabled = false;
+        }
     }
 }
