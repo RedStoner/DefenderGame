@@ -19,7 +19,14 @@ public class Health : NetworkBehaviour {
     public void TakeDamage (int amt)
     {
         if (!isServer) { return; }
-        currentHealth -= amt - attributes.armor;
+        if (amt - attributes.armor < 0)
+        {
+            amt = 0;
+        } else
+        {
+            amt -= attributes.armor;
+        }
+        currentHealth -= amt;
         if (currentHealth <= 0)
         {
             currentHealth = attributes.maxHealth;
