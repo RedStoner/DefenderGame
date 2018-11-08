@@ -8,6 +8,7 @@ public class Combat : NetworkBehaviour {
 
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
+    public Transform rotator;
 
     private float attackCooldown = 0.0f;
     private Attributes attributes;
@@ -32,12 +33,27 @@ public class Combat : NetworkBehaviour {
         if (attackCooldown >= attackSpeed)
         {
             attackCooldown -= attackSpeed;
-            if (target == null || !TargetInRange(target))
+            //check if current target is in range if it has a target.
+            if (HasTarget())
             {
+                //target has left attack range, clear target
+                if (!TargetInRange(target))
+                {
+                    target = null;
+                    Log("Prior Target In Range: false");
+                } else
+                {
+                    Log("Prior Target In Range: true");
+                }
+            }
+            //If there is no target, get a new one.
+            if (!HasTarget())
+            {
+                Log("Aquiring New Target.");
                 Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, attackRange);
+                Log("Number of targets in range: " + hitColliders.Length);
                 if (hitColliders.Length < 0)
                 {
-                    print("No Target");
                     return;
                 }
                 int i = 0;
@@ -48,25 +64,33 @@ public class Combat : NetworkBehaviour {
                         //check if its closest and has line of sight.
                         if (HasLineOfSight(hitColliders[i].gameObject))
                         {
+                            Log("Found valid target in scan.");
                             target = hitColliders[i].gameObject;
+                            break;
+                        } else
+                        {
                         }
+                    } else
+                    {
+                        Log("Range Test - Not a valid hostile");
                     }
                     i++;
                 }
             }
-            if (target != null)
+            //Attack the target.
+            if (HasTarget())
             {
                 //check if moving
                 if (gameObject.GetComponent<HeroControllerAgent>().playerAgent.hasPath)
                 {
-                    print("Cant Shoot, Still Moving.");
+                    Log("Can't Shoot, Still Moving.");
                 } else {
                     CmdShootTargetHitScan();
-                    print("Shooting");
+                    //Log("Shooting");
                 }
             } else
             {
-                print("No Target");
+                Log("No Target At End");
             }
 
         }
@@ -93,7 +117,8 @@ public class Combat : NetworkBehaviour {
     [Command]
     void CmdShootTargetBullet()
     {
-        gameObject.transform.LookAt(target.transform);
+        LookAt(transform, target.transform);
+        bulletSpawn.LookAt(target.transform);
         var bullet = (GameObject)Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
         bullet.transform.LookAt(target.transform);
         bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 20;
@@ -104,9 +129,10 @@ public class Combat : NetworkBehaviour {
     [Command]
     void CmdShootTargetHitScan()
     {
-        gameObject.transform.LookAt(target.transform);
+        LookAt(transform, target.transform);
+        bulletSpawn.LookAt(target.transform);
         gunLine.enabled = true;
-        gunLine.SetPosition(0, transform.position);
+        gunLine.SetPosition(0, bulletSpawn.position);
         gunLine.SetPosition(1, target.transform.position);
         target.GetComponent<Health>().TakeDamage(attributes.attackDamage);
     }
@@ -119,6 +145,7 @@ public class Combat : NetworkBehaviour {
         double distance = Vector3.Distance(gameObject.transform.position, checkTarget.transform.position);
         if (distance > attackRange)
         {
+            //Log("Target not in range.");
             return false;
         }
         return HasLineOfSight(checkTarget);
@@ -126,16 +153,20 @@ public class Combat : NetworkBehaviour {
     }
     private bool HasLineOfSight(GameObject checkTarget)
     {
+        LookAt(rotator, checkTarget.transform);
         bulletSpawn.transform.LookAt(checkTarget.transform);
         RaycastHit hit;
+        bool isValid = false;
         if (Physics.Raycast(bulletSpawn.transform.position, bulletSpawn.transform.forward, out hit, attackRange ))
         {
             if (hit.transform.gameObject == checkTarget)
             {
-                return true;
+                //Log("Has Line of sight.");
+                isValid = true;
             }
-        } 
-        return false;
+        }
+        rotator.rotation = transform.rotation;
+        return isValid;
 
     }
     private void EffectsCheck()
@@ -146,5 +177,24 @@ public class Combat : NetworkBehaviour {
         {
             gunLine.enabled = false;
         }
+    }
+    public bool HasTarget()
+    {
+        if (target != null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    void Log(string str)
+    {
+        print("[" + Time.fixedTime + "] " + str);
+    }
+    void LookAt(Transform lookie, Transform lookTarget)
+    {
+        lookie.LookAt(new Vector3(lookTarget.position.x, lookie.position.y, lookTarget.position.z));
     }
 }
